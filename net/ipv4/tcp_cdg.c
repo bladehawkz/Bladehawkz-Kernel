@@ -29,6 +29,10 @@
 #include <linux/module.h>
 #include <net/tcp.h>
 
+#define U16_MAX		((u16)~0U)
+#define U32_MAX		((u32)~0U)
+#define prandom_u32()	random32()
+
 #define HYSTART_ACK_TRAIN	1
 #define HYSTART_DELAY		2
 
