@@ -861,6 +861,7 @@ void tcp_enter_cwr(struct sock *sk, const int set_ssthresh)
 		tcp_set_ca_state(sk, TCP_CA_CWR);
 	}
 }
+EXPORT_SYMBOL(tcp_enter_cwr);
 
 /*
  * Packet counting of FACK is based on in-order assumptions, therefore TCP
