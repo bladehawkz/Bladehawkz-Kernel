@@ -355,9 +355,8 @@ OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
 		     -fsched-spec-load -fforce-addr \
 		     -fno-tree-vectorize $(GRAHPITE) \
 		     -munaligned-access -marm \
-		     -fipa-pta -fivopts -fomit-frame-pointer \
-		     -fsection-anchors \
-		     -fsection-anchors -funsafe-loop-optimizations -funswitch-loops \
+		     -fipa-pta -fivopts \
+		     -fsection-anchors -funsafe-loop-optimizations \
 		     -ftracer -ftree-loop-im -ftree-loop-ivcanon
 
 CFLAGS_MODULE   = -DMODULE -flto $(OPTIMIZATION_FLAGS)
