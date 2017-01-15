@@ -11,3 +11,13 @@ obj-y += q6adm.o q6afe.o q6asm.o q6audio-v2.o q6voice.o q6core.o audio_acdb.o \
 	 rtac.o q6lsm.o
 ocmem-audio-objs += audio_ocmem.o
 obj-$(CONFIG_AUDIO_OCMEM) += ocmem-audio.o
+GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
+ccflags-y			:= -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
+				-fsingle-precision-constant \
+				-fgcse-sm -fgcse-las \
+				-fsched-spec-load -fforce-addr \
+				-fno-tree-vectorize $(GRAHPITE) \
+				-munaligned-access -marm \
+				-fipa-pta -fivopts \
+				-fsection-anchors -funsafe-loop-optimizations \
+				-ftracer -ftree-loop-im -ftree-loop-ivcanon

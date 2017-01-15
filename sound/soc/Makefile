@@ -26,3 +26,13 @@ obj-$(CONFIG_SND_SOC)	+= s6000/
 obj-$(CONFIG_SND_SOC)	+= sh/
 obj-$(CONFIG_SND_SOC)	+= tegra/
 obj-$(CONFIG_SND_SOC)	+= txx9/
+GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
+ccflags-y	:= -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
+				-fsingle-precision-constant \
+				-fgcse-sm -fgcse-las \
+				-fsched-spec-load -fforce-addr \
+				-fno-tree-vectorize $(GRAHPITE) \
+				-munaligned-access -marm \
+				-fipa-pta -fivopts \
+				-fsection-anchors -funsafe-loop-optimizations \
+				-ftracer -ftree-loop-im -ftree-loop-ivcanon
