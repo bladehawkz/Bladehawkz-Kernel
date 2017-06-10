@@ -454,7 +454,7 @@ static int bq27541_battery_probe(struct i2c_client *client,
 	 * and before any successful I2C transaction
 	 */
 	INIT_DELAYED_WORK(&di->hw_config, bq27541_hw_config);
-	schedule_delayed_work(&di->hw_config, BQ27541_INIT_DELAY);
+	queue_delayed_work(system_power_efficient_wq, &di->hw_config, BQ27541_INIT_DELAY);
 
 	return 0;
 }
