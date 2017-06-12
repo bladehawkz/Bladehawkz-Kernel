@@ -29,7 +29,8 @@ obj-$(CONFIG_MSM_ADSP_LOADER) += adsp-loader.o
 obj-$(CONFIG_MSM_ULTRASOUND_A) += ultrasound/version_a/
 obj-$(CONFIG_MSM_ULTRASOUND_B) += ultrasound/version_b/
 GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
-ccflags-y			:= -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
+ccflags-y			:= -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -march=armv7ve -mfpu=neon-vfpv4 \
+				-mvectorize-with-neon-quad -DNDEBUG \
 				-fsingle-precision-constant \
 				-fgcse-sm -fgcse-las \
 				-fsched-spec-load -fforce-addr \
@@ -37,4 +38,4 @@ ccflags-y			:= -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
 				-munaligned-access -marm \
 				-fipa-pta -fivopts \
 				-fsection-anchors -funsafe-loop-optimizations \
-				-ftracer -ftree-loop-im -ftree-loop-ivcanon
+				-ftracer -ftree-loop-im -ftree-loop-ivcanon -funroll-loops

@@ -349,7 +349,8 @@ CHECK		= sparse
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
+OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -march=armv7ve -mfpu=neon-vfpv4 \
+		     -mvectorize-with-neon-quad -DNDEBUG \
                      -fsingle-precision-constant \
                      -fgcse-sm -fgcse-las \
 		     -fsched-spec-load -fforce-addr \
@@ -357,7 +358,7 @@ OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
 		     -munaligned-access -marm \
 		     -fipa-pta -fivopts \
 		     -fsection-anchors -funsafe-loop-optimizations \
-		     -ftracer -ftree-loop-im -ftree-loop-ivcanon
+		     -ftracer -ftree-loop-im -ftree-loop-ivcanon -funroll-loops
 
 CFLAGS_MODULE   = -DMODULE -flto $(OPTIMIZATION_FLAGS)
 AFLAGS_MODULE   = -DMODULE -flto $(OPTIMIZATION_FLAGS)
@@ -571,13 +572,10 @@ endif # $(dot-config)
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 all: vmlinux
 
-KBUILD_CFLAGS	+= -Ofast
+KBUILD_CFLAGS	+= -O3
 KBUILD_CFLAGS   += -g0 -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize -Wno-array-bounds -fivopts
 KBUILD_CFLAGS   += $(call cc-disable-warning,maybe-uninitialized) -fno-inline-functions
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
-KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
-KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
-KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
 
