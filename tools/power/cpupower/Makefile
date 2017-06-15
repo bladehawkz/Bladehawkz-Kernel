@@ -114,17 +114,7 @@ export CROSS CC AR STRIP RANLIB CFLAGS LDFLAGS LIB_OBJS
 cc-supports = ${shell if $(CC) ${1} -S -o /dev/null -xc /dev/null > /dev/null 2>&1; then echo "$(1)"; fi;}
 
 # use '-Os' optimization if available, else use -O2
-GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
-OPTIMIZATION := 		-O3 -mcpu=cortex-a15 -mtune=cortex-a15 -march=armv7ve -mfpu=neon-vfpv4 \
-				-mvectorize-with-neon-quad -DNDEBUG \
-				-fsingle-precision-constant \
-				-fgcse-sm -fgcse-las \
-				-fsched-spec-load -fforce-addr \
-				-fno-tree-vectorize $(GRAHPITE) \
-				-munaligned-access -marm \
-				-fipa-pta -fivopts \
-				-fsection-anchors -funsafe-loop-optimizations \
-				-ftracer -ftree-loop-im -ftree-loop-ivcanon -funroll-loops
+OPTIMIZATION := $(call cc-supports,-O3,-O2)
 
 WARNINGS := -Wall -Wchar-subscripts -Wpointer-arith -Wsign-compare
 WARNINGS += $(call cc-supports,-Wno-pointer-sign)

@@ -243,12 +243,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
 	  else echo sh; fi ; fi)
 
-GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
-
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 -fno-tree-vectorize -fomit-frame-pointer -fgcse-sm -fgcse-las -flto -fipa-pta -fivopts $(GRAPHITE)
-HOSTCXXFLAGS = -DNDEBUG -O3 -fno-tree-vectorize -flto $(GRAPHITE)
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
+HOSTCXXFLAGS = -O2
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -328,11 +326,21 @@ MAKEFLAGS += --include-dir=$(srctree)
 $(srctree)/scripts/Kbuild.include: ;
 include $(srctree)/scripts/Kbuild.include
 
+GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
+
+OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
+		     -mvectorize-with-neon-quad -DNDEBUG \
+                     -fgcse-sm -fgcse-las -fgcse-after-reload \
+		     -fno-tree-vectorize -fno-inline-functions \
+		     -fipa-pta -fivopts \
+		     -fmodulo-sched -fmodulo-sched-allow-regmoves \
+		     -ftracer -ftree-loop-im -ftree-loop-ivcanon $(GRAPHITE)
+
 # Make variables (CC, etc...)
 
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-CC		= $(CROSS_COMPILE)gcc
+CC		= $(CROSS_COMPILE)gcc $(OPTIMIZATION_FLAGS)
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -349,22 +357,11 @@ CHECK		= sparse
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -march=armv7ve -mfpu=neon-vfpv4 \
-		     -mvectorize-with-neon-quad -DNDEBUG \
-                     -fsingle-precision-constant \
-                     -fgcse-sm -fgcse-las \
-		     -fsched-spec-load -fforce-addr \
-		     -fno-tree-vectorize $(GRAHPITE) \
-		     -munaligned-access -marm \
-		     -fipa-pta -fivopts \
-		     -fsection-anchors -funsafe-loop-optimizations \
-		     -ftracer -ftree-loop-im -ftree-loop-ivcanon -funroll-loops
-
-CFLAGS_MODULE   = -DMODULE -flto $(OPTIMIZATION_FLAGS)
-AFLAGS_MODULE   = -DMODULE -flto $(OPTIMIZATION_FLAGS)
+CFLAGS_MODULE   = -DMODULE
+AFLAGS_MODULE   = -DMODULE
 LDFLAGS_MODULE  =
-CFLAGS_KERNEL	= $(OPTIMIZATION_FLAGS)
-AFLAGS_KERNEL	= $(OPTIMIZATION_FLAGS)
+CFLAGS_KERNEL	=
+AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
 
@@ -377,12 +374,11 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
-KBUILD_CFLAGS   := -DNDEBUG -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
-		   -fno-delete-null-pointer-checks \
-		   $(OPTIMIZATION_FLAGS)
+		   -fno-delete-null-pointer-checks
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -572,11 +568,6 @@ endif # $(dot-config)
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 all: vmlinux
 
-KBUILD_CFLAGS	+= -O3
-KBUILD_CFLAGS   += -g0 -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize -Wno-array-bounds -fivopts
-KBUILD_CFLAGS   += $(call cc-disable-warning,maybe-uninitialized) -fno-inline-functions
-KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
-
 include $(srctree)/arch/$(SRCARCH)/Makefile
 
 ifneq ($(CONFIG_FRAME_WARN),0)
@@ -603,11 +594,6 @@ else
 ifndef CONFIG_FUNCTION_TRACER
 KBUILD_CFLAGS	+= -fomit-frame-pointer
 endif
-endif
-
-ifdef CONFIG_DEBUG_INFO
-KBUILD_CFLAGS	+= -gdwarf-2
-KBUILD_AFLAGS	+= -gdwarf-2
 endif
 
 ifdef CONFIG_DEBUG_INFO_REDUCED
