@@ -331,7 +331,6 @@ GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distrib
 OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
 		     -mvectorize-with-neon-quad -DNDEBUG \
                      -fgcse-sm -fgcse-las -fgcse-after-reload \
-		     -fno-tree-vectorize -fno-inline-functions \
 		     -fipa-pta -fivopts \
 		     -fmodulo-sched -fmodulo-sched-allow-regmoves \
 		     -ftracer -ftree-loop-im -ftree-loop-ivcanon $(GRAPHITE)
