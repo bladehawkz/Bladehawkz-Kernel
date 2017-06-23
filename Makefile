@@ -328,18 +328,21 @@ include $(srctree)/scripts/Kbuild.include
 
 GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
 
-OPTIMIZATION_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
+CC_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
 		     -mvectorize-with-neon-quad -DNDEBUG \
-                     -fgcse-sm -fgcse-las -fgcse-after-reload \
-		     -fipa-pta -fivopts \
+                     -fgcse-sm -fgcse-las \
+		     -fweb -frename-registers \
+		     -fipa-pta -fivopts -fira-loop-pressure \
 		     -fmodulo-sched -fmodulo-sched-allow-regmoves \
 		     -ftracer -ftree-loop-im -ftree-loop-ivcanon $(GRAPHITE)
+		     
+LD_FLAGS = -O3 --sort-common
 
 # Make variables (CC, etc...)
 
 AS		= $(CROSS_COMPILE)as
-LD		= $(CROSS_COMPILE)ld
-CC		= $(CROSS_COMPILE)gcc $(OPTIMIZATION_FLAGS)
+LD		= $(CROSS_COMPILE)ld $(LD_FLAGS)
+CC		= $(CROSS_COMPILE)gcc $(CC_FLAGS)
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
