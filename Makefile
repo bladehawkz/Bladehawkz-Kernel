@@ -326,17 +326,37 @@ MAKEFLAGS += --include-dir=$(srctree)
 $(srctree)/scripts/Kbuild.include: ;
 include $(srctree)/scripts/Kbuild.include
 
-GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
+CPUSPECIFIC = -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 -mvectorize-with-neon-quad \
+		--param l1-cache-line-size=64 --param l1-cache-size=16 --param l2-cache-size=2048
 
-CC_FLAGS = -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
-		     -mvectorize-with-neon-quad -DNDEBUG \
-                     -fgcse-sm -fgcse-las \
-		     -fweb -frename-registers \
-		     -fipa-pta -fivopts -fira-loop-pressure \
-		     -fmodulo-sched -fmodulo-sched-allow-regmoves \
-		     -ftracer -ftree-loop-im -ftree-loop-ivcanon $(GRAPHITE)
+DISABLEDEBUG = -g0 -DNDEBUG
+
+REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure
+
+MISCOPTIMIZE = -fgcse-sm -fgcse-las -ftracer -fsection-anchors -fomit-frame-pointer \
+		-fipa-pta -fivopts -fmodulo-sched -fmodulo-sched-allow-regmoves
+
+GRAPHITE = -fgraphite -fgraphite-identity
+
+LOOPOPTIMIZE = -ftree-loop-linear -ftree-loop-im -ftree-loop-distribution -ftree-loop-ivcanon \
+		-floop-interchange -floop-strip-mine -floop-block  -floop-nest-optimize		
+
+SELECTIVESCHEDULE = -fselective-scheduling -fselective-scheduling2 \
+		     -fsel-sched-pipelining -fsel-sched-pipelining-outer-loops
+
+BRANCHREGISTEROPTIMIZE = -fbranch-target-load-optimize -fbtr-bb-exclusive -fstdarg-opt
+
+CC_FLAGS = -O3 \
+		$(CPUSPECIFIC) \
+		$(DISABLEDEBUG) \
+		$(REGISTEROPTIMIZE) \
+		$(MISCOPTIMIZE) \
+		$(GRAPHITE) \
+		$(LOOPOPTIMIZE) \
+		$(SELECTIVESCHEDULE) \
+		$(BRANCHREGISTEROPTIMIZE)
 		     
-LD_FLAGS = -O3 --sort-common
+LD_FLAGS = -O3 --sort-common --strip-debug
 
 # Make variables (CC, etc...)
 
