@@ -326,7 +326,7 @@ MAKEFLAGS += --include-dir=$(srctree)
 $(srctree)/scripts/Kbuild.include: ;
 include $(srctree)/scripts/Kbuild.include
 
-CPUSPECIFIC = -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 -mvectorize-with-neon-quad \
+CPUSPECIFIC = -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -fsingle-precision-constant \
 		--param l1-cache-line-size=64 --param l1-cache-size=16 --param l2-cache-size=2048
 
 DISABLEDEBUG = -g0 -DNDEBUG
