@@ -331,7 +331,8 @@ CPUSPECIFIC = -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 -mvectorize-wi
 
 DISABLEDEBUG = -g0 -DNDEBUG
 
-REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure
+REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure \
+			-fsched-pressure -fsched-spec-load -fsched-spec-load-dangerous
 
 MISCOPTIMIZE = -fgcse-sm -fgcse-las -ftracer -fsection-anchors -fomit-frame-pointer \
 		-fipa-pta -fivopts -fmodulo-sched -fmodulo-sched-allow-regmoves
