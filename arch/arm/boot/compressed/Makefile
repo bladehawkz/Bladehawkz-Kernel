@@ -26,18 +26,36 @@ HEAD	= head.o
 OBJS	+= misc.o decompress.o
 FONTC	= $(srctree)/drivers/video/console/font_acorn_8x8.c
 
-# string library code (-Os is enforced to keep it much smaller)
+# string library code (-Os is enforced to keep it much smaller) 
+# We will disable all optimisations, then renable those that decrease code size or fit into the cache size
 OBJS		+= string.o
-GRAPHITE = -fgraphite -fgraphite-identity -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block -ftree-loop-linear -floop-nest-optimize
-CFLAGS_string.o	:= -O3 -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 \
-				-fsingle-precision-constant \
-				-fgcse-sm -fgcse-las \
-				-fsched-spec-load -fforce-addr \
-				-fno-tree-vectorize $(GRAHPITE) \
-				-munaligned-access -marm \
-				-fipa-pta -fivopts \
-				-fsection-anchors -funsafe-loop-optimizations \
-				-ftracer -ftree-loop-im -ftree-loop-ivcanon
+
+CPUSPECIFIC = -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -fsingle-precision-constant \
+		--param l1-cache-line-size=64 --param l1-cache-size=16 --param l2-cache-size=2048
+
+DISABLEDEBUG = -g0 -DNDEBUG
+
+REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure \
+			-fsched-pressure -fsched-spec-load -fsched-spec-load-dangerous
+
+MISCOPTIMIZE = -fgcse-las -fomit-frame-pointer \
+		-fipa-pta -fivopts -fmodulo-sched -fmodulo-sched-allow-regmoves	
+
+SELECTIVESCHEDULE = -fselective-scheduling -fselective-scheduling2
+
+BRANCHREGISTEROPTIMIZE = -fbranch-target-load-optimize -fbtr-bb-exclusive -fstdarg-opt
+
+FROMOTHREE = -fschedule-insns -fschedule-insns2 -fpredictive-commoning -fgcse-after-reload -ftree-vectorize \
+		-ftree-loop-distribute-patterns -fsplit-paths -ftree-partial-pre
+
+CFLAGS_string.o	:= -O0 -Os \
+		$(CPUSPECIFIC) \
+		$(DISABLEDEBUG) \
+		$(REGISTEROPTIMIZE) \
+		$(MISCOPTIMIZE) \
+		$(SELECTIVESCHEDULE) \
+		$(BRANCHREGISTEROPTIMIZE) \
+		$(FROMOTHREE)
 
 #
 # Architecture dependencies
