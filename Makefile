@@ -334,7 +334,7 @@ DISABLEDEBUG = -g0 -DNDEBUG
 REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure \
 			-fsched-pressure -fsched-spec-load -fsched-spec-load-dangerous
 
-MISCOPTIMIZE = -fgcse-sm -fgcse-las -ftracer -fsection-anchors -fomit-frame-pointer \
+MISCOPTIMIZE = -fgcse-sm -fgcse-las -ftracer -fsection-anchors \
 		-fipa-pta -fivopts -fmodulo-sched -fmodulo-sched-allow-regmoves
 
 GRAPHITE = -fgraphite -fgraphite-identity
