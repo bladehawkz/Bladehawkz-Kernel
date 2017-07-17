@@ -340,7 +340,7 @@ MISCOPTIMIZE = -fgcse-sm -fgcse-las -ftracer -fsection-anchors \
 GRAPHITE = -fgraphite -fgraphite-identity
 
 LOOPOPTIMIZE = -ftree-loop-linear -ftree-loop-im -ftree-loop-distribution -ftree-loop-ivcanon \
-		-floop-interchange -floop-strip-mine -floop-block  -floop-nest-optimize		
+		-floop-interchange -floop-strip-mine -floop-block  -floop-nest-optimize	-fvariable-expansion-in-unroller	
 
 SELECTIVESCHEDULE = -fselective-scheduling -fselective-scheduling2 \
 		     -fsel-sched-pipelining -fsel-sched-pipelining-outer-loops
