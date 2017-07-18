@@ -45,10 +45,28 @@ SELECTIVESCHEDULE = -fselective-scheduling -fselective-scheduling2
 
 BRANCHREGISTEROPTIMIZE = -fbranch-target-load-optimize -fbtr-bb-exclusive -fstdarg-opt
 
-FROMOTHREE = -fschedule-insns -fschedule-insns2 -fpredictive-commoning -fgcse-after-reload -ftree-vectorize \
+FROMOTHREE = -fpredictive-commoning -fgcse-after-reload -ftree-vectorize \
 		-ftree-loop-distribute-patterns -fsplit-paths -ftree-partial-pre
 
 CFLAGS_string.o	:= -O0 -Os \
+		$(CPUSPECIFIC) \
+		$(DISABLEDEBUG) \
+		$(REGISTEROPTIMIZE) \
+		$(MISCOPTIMIZE) \
+		$(SELECTIVESCHEDULE) \
+		$(BRANCHREGISTEROPTIMIZE) \
+		$(FROMOTHREE)
+		
+CFLAGS_decompress.o := -O0 -Os \
+		$(CPUSPECIFIC) \
+		$(DISABLEDEBUG) \
+		$(REGISTEROPTIMIZE) \
+		$(MISCOPTIMIZE) \
+		$(SELECTIVESCHEDULE) \
+		$(BRANCHREGISTEROPTIMIZE) \
+		$(FROMOTHREE)
+		
+CFLAGS_misc.o := -O0 -Os \
 		$(CPUSPECIFIC) \
 		$(DISABLEDEBUG) \
 		$(REGISTEROPTIMIZE) \
