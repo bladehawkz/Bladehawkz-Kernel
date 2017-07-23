@@ -33,47 +33,11 @@ OBJS		+= string.o
 CPUSPECIFIC = -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -fsingle-precision-constant \
 		--param l1-cache-line-size=64 --param l1-cache-size=16 --param l2-cache-size=2048
 
-DISABLEDEBUG = -g0 -DNDEBUG
-
-REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure \
-			-fsched-pressure -fsched-spec-load -fsched-spec-load-dangerous
-
-MISCOPTIMIZE = -fgcse-las -fomit-frame-pointer \
-		-fipa-pta -fivopts -fmodulo-sched -fmodulo-sched-allow-regmoves	
-
-SELECTIVESCHEDULE = -fselective-scheduling -fselective-scheduling2
-
-BRANCHREGISTEROPTIMIZE = -fbranch-target-load-optimize -fbtr-bb-exclusive -fstdarg-opt
-
-FROMOTHREE = -fpredictive-commoning -fgcse-after-reload -ftree-vectorize \
-		-ftree-loop-distribute-patterns -fsplit-paths -ftree-partial-pre
-
-CFLAGS_string.o	:= -O0 -Os \
-		$(CPUSPECIFIC) \
-		$(DISABLEDEBUG) \
-		$(REGISTEROPTIMIZE) \
-		$(MISCOPTIMIZE) \
-		$(SELECTIVESCHEDULE) \
-		$(BRANCHREGISTEROPTIMIZE) \
-		$(FROMOTHREE)
+CFLAGS_string.o	:= -Os $(CPUSPECIFIC)
 		
-CFLAGS_decompress.o := -O0 -Os \
-		$(CPUSPECIFIC) \
-		$(DISABLEDEBUG) \
-		$(REGISTEROPTIMIZE) \
-		$(MISCOPTIMIZE) \
-		$(SELECTIVESCHEDULE) \
-		$(BRANCHREGISTEROPTIMIZE) \
-		$(FROMOTHREE)
+CFLAGS_decompress.o := -Os $(CPUSPECIFIC)
 		
-CFLAGS_misc.o := -O0 -Os \
-		$(CPUSPECIFIC) \
-		$(DISABLEDEBUG) \
-		$(REGISTEROPTIMIZE) \
-		$(MISCOPTIMIZE) \
-		$(SELECTIVESCHEDULE) \
-		$(BRANCHREGISTEROPTIMIZE) \
-		$(FROMOTHREE)
+CFLAGS_misc.o := -Os $(CPUSPECIFIC)
 
 #
 # Architecture dependencies
