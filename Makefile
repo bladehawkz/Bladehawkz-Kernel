@@ -346,7 +346,7 @@ CC_FLAGS = -O3 \
 		$(REGISTEROPTIMIZE) \
 		$(MISCOPTIMIZE) \
 		$(GRAPHITE) \
-		$(LOOPOPTIMIZE) \
+		$(LOOPOPTIMIZE)
 		     
 LD_FLAGS = -O3 --sort-common --strip-debug
 
