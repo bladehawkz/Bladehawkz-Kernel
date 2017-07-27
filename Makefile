@@ -335,17 +335,15 @@ REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure -fsched-pressure
 
 MISCOPTIMIZE = -fgcse-sm -fgcse-las -fipa-pta -fivopts -fmodulo-sched -fmodulo-sched-allow-regmoves
 
-GRAPHITE = -fgraphite -fgraphite-identity
+#GRAPHITE = -fgraphite -fgraphite-identity -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
 
-LOOPOPTIMIZE = -ftree-loop-linear -ftree-loop-im -ftree-loop-distribution -ftree-loop-ivcanon \
-		-floop-interchange -floop-strip-mine -floop-block -floop-nest-optimize	
+LOOPOPTIMIZE = -ftree-loop-im -ftree-loop-distribution -ftree-loop-ivcanon
 
 CC_FLAGS = -O3 \
 		$(CPUSPECIFIC) \
 		$(DISABLEDEBUG) \
 		$(REGISTEROPTIMIZE) \
 		$(MISCOPTIMIZE) \
-		$(GRAPHITE) \
 		$(LOOPOPTIMIZE)
 		     
 LD_FLAGS = -O3 --sort-common --strip-debug
