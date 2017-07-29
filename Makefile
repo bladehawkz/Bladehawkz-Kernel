@@ -339,12 +339,18 @@ MISCOPTIMIZE = -fgcse-sm -fgcse-las -fipa-pta -fivopts -fmodulo-sched -fmodulo-s
 
 LOOPOPTIMIZE = -ftree-loop-im -ftree-loop-distribution -ftree-loop-ivcanon
 
+IMPROVECOMPILER = --param max-crossjump-edges=300 --param max-delay-slot-insn-search=300 --param max-delay-slot-live-search=1000 \
+		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=120 --param dse-max-object-size=1024 \
+		--param max-reload-search-insns=300 --param max-cselib-memory-locations=1500 --param max-sched-ready-insns=300 \
+		--param loop-invariant-max-bbs-in-loop=20000
+		
 CC_FLAGS = -O3 \
 		$(CPUSPECIFIC) \
 		$(DISABLEDEBUG) \
 		$(REGISTEROPTIMIZE) \
 		$(MISCOPTIMIZE) \
-		$(LOOPOPTIMIZE)
+		$(LOOPOPTIMIZE) \
+		$(IMPROVECOMPILER)
 		     
 LD_FLAGS = -O3 --sort-common --strip-debug
 
