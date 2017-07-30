@@ -339,10 +339,18 @@ MISCOPTIMIZE = -fgcse-sm -fgcse-las -fipa-pta -fivopts -fmodulo-sched -fmodulo-s
 
 LOOPOPTIMIZE = -ftree-loop-im -ftree-loop-distribution -ftree-loop-ivcanon
 
-IMPROVECOMPILER = --param max-crossjump-edges=300 --param max-delay-slot-insn-search=300 --param max-delay-slot-live-search=1000 \
-		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=120 --param dse-max-object-size=1024 \
-		--param max-reload-search-insns=300 --param max-cselib-memory-locations=1500 --param max-sched-ready-insns=300 \
-		--param loop-invariant-max-bbs-in-loop=20000
+IMPROVECOMPILER = --param max-crossjump-edges=600 --param max-delay-slot-insn-search=600 --param max-delay-slot-live-search=2000 \
+		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=240 --param dse-max-object-size=2048 \
+		--param max-reload-search-insns=600 --param max-cselib-memory-locations=3000 --param max-sched-ready-insns=600 \
+		--param loop-invariant-max-bbs-in-loop=40000
+		
+MAYBEIMPROVECOMPILER = --param max-pending-list-length=64 --param gcse-unrestricted-cost=2 --param max-hoist-depth=50 \
+			--param max-tail-merge-comparisons=20 --param max-tail-merge-iterations=4 \
+			--param iv-consider-all-candidates-bound=80 --param scev-max-expr-size=300 \
+			--param scev-max-expr-complexity=30 --param vect-max-version-for-alignment-checks=12 \
+			--param vect-max-version-for-alias-checks=12 --param max-iterations-to-track=2000 \
+			--param max-partial-antic-length=300  --param loop-max-datarefs-for-datadeps=2000 \
+			--param chkp-max-ctor-size=1000
 		
 CC_FLAGS = -O3 \
 		$(CPUSPECIFIC) \
@@ -350,7 +358,8 @@ CC_FLAGS = -O3 \
 		$(REGISTEROPTIMIZE) \
 		$(MISCOPTIMIZE) \
 		$(LOOPOPTIMIZE) \
-		$(IMPROVECOMPILER)
+		$(IMPROVECOMPILER) \
+		$(MAYBEIMPROVECOMPILER)
 		     
 LD_FLAGS = -O3 --sort-common --strip-debug
 
@@ -363,7 +372,7 @@ CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
 STRIP		= $(CROSS_COMPILE)strip
-OBJCOPY		= $(CROSS_COMPILE)objcopy
+OBJCOPY		= $(CROSS_COMPILE)objcopy --remove-section=.note.gnu.build-id
 OBJDUMP		= $(CROSS_COMPILE)objdump
 AWK		= awk
 GENKSYMS	= scripts/genksyms/genksyms
@@ -589,6 +598,9 @@ all: vmlinux
 
 # Needed to unbreak GCC 7.x and above
 KBUILD_CFLAGS   += $(call cc-option,-fno-store-merging,)
+
+# Tell gcc to never replace conditional load with a non-conditional one
+KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
 
