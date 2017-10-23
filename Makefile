@@ -335,14 +335,16 @@ REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure -fsched-pressure
 
 MISCOPTIMIZE = -fgcse-sm -fgcse-las -fipa-pta -fivopts #-fmodulo-sched -fmodulo-sched-allow-regmoves
 
-#GRAPHITE = -fgraphite -fgraphite-identity -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
+GRAPHITE = -fgraphite -fgraphite-identity -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block -floop-flatten
 
 LOOPOPTIMIZE = -ftree-loop-distribution -ftree-loop-ivcanon -ftree-loop-im
 
 IMPROVECOMPILER = --param max-crossjump-edges=2400 --param max-delay-slot-insn-search=2400 --param max-delay-slot-live-search=8000 \
-		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=960 --param dse-max-object-size=8192 \
+		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=960 \
 		--param max-reload-search-insns=2400 --param max-cselib-memory-locations=12000 --param max-sched-ready-insns=2400 \
 		--param loop-invariant-max-bbs-in-loop=160000
+#GCC7
+#		--param dse-max-object-size=8192 \
 		
 MAYBEIMPROVECOMPILER = --param max-pending-list-length=128 --param gcse-unrestricted-cost=2 --param max-hoist-depth=100 \
 			--param max-tail-merge-comparisons=40 --param max-tail-merge-iterations=8 \
@@ -357,7 +359,7 @@ CC_FLAGS = -O3 \
 		$(DISABLEDEBUG) \
 		$(REGISTEROPTIMIZE) \
 		$(MISCOPTIMIZE) \
-#		$(GRAPHITE) \
+		$(GRAPHITE) \
 		$(LOOPOPTIMIZE) \
 		$(IMPROVECOMPILER) \
 		$(MAYBEIMPROVECOMPILER)
@@ -598,7 +600,7 @@ endif # $(dot-config)
 all: vmlinux
 
 # Needed to unbreak GCC 7.x and above
-KBUILD_CFLAGS   += $(call cc-option,-fno-store-merging,)
+# KBUILD_CFLAGS   += $(call cc-option,-fno-store-merging,)
 
 # Tell gcc to never replace conditional load with a non-conditional one
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
