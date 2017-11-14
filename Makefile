@@ -333,16 +333,16 @@ DISABLEDEBUG = -g0 -DNDEBUG
 
 REGISTEROPTIMIZE = -fweb -frename-registers -fira-loop-pressure -fsched-pressure
 
-MISCOPTIMIZE = -fgcse-sm -fgcse-las -fipa-pta -fivopts #-fmodulo-sched -fmodulo-sched-allow-regmoves
+MISCOPTIMIZE = -fgcse-sm -fgcse-las -fipa-pta -fivopts -fmodulo-sched -fmodulo-sched-allow-regmoves
 
 GRAPHITE = -fgraphite -fgraphite-identity -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block -floop-flatten
 
 LOOPOPTIMIZE = -ftree-loop-distribution -ftree-loop-ivcanon -ftree-loop-im
 
-IMPROVECOMPILER = --param max-crossjump-edges=2400 --param max-delay-slot-insn-search=2400 --param max-delay-slot-live-search=8000 \
-		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=960 \
-		--param max-reload-search-insns=2400 --param max-cselib-memory-locations=12000 --param max-sched-ready-insns=2400 \
-		--param loop-invariant-max-bbs-in-loop=160000
+IMPROVECOMPILER = --param max-crossjump-edges=4800 --param max-delay-slot-insn-search=4800 --param max-delay-slot-live-search=16000 \
+		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=1920 \
+		--param max-reload-search-insns=4800 --param max-cselib-memory-locations=24000 --param max-sched-ready-insns=4800 \
+		--param loop-invariant-max-bbs-in-loop=240000
 #GCC7
 #		--param dse-max-object-size=8192 \
 		
