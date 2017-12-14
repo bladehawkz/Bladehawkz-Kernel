@@ -339,20 +339,23 @@ GRAPHITE = -fgraphite -fgraphite-identity -ftree-loop-linear -floop-interchange 
 
 LOOPOPTIMIZE = -ftree-loop-distribution -ftree-loop-ivcanon -ftree-loop-im
 
-IMPROVECOMPILER = --param max-crossjump-edges=4800 --param max-delay-slot-insn-search=4800 --param max-delay-slot-live-search=16000 \
-		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=1920 \
-		--param max-reload-search-insns=4800 --param max-cselib-memory-locations=24000 --param max-sched-ready-insns=4800 \
-		--param loop-invariant-max-bbs-in-loop=240000
+IMPROVECOMPILER = --param max-crossjump-edges=9600 --param max-delay-slot-insn-search=9600 --param max-delay-slot-live-search=32000 \
+		--param max-gcse-memory=1073741824 --param max-modulo-backtrack-attempts=3840 \
+		--param max-reload-search-insns=9600 --param max-cselib-memory-locations=48000 --param max-sched-ready-insns=9600 \
+		--param loop-invariant-max-bbs-in-loop=480000
 #GCC7
 #		--param dse-max-object-size=8192 \
 		
-MAYBEIMPROVECOMPILER = --param max-pending-list-length=128 --param gcse-unrestricted-cost=2 --param max-hoist-depth=100 \
-			--param max-tail-merge-comparisons=40 --param max-tail-merge-iterations=8 \
-			--param iv-consider-all-candidates-bound=160 --param scev-max-expr-size=600 \
-			--param scev-max-expr-complexity=60 --param vect-max-version-for-alignment-checks=24 \
-			--param vect-max-version-for-alias-checks=24 --param max-iterations-to-track=4000 \
-			--param max-partial-antic-length=1200  --param loop-max-datarefs-for-datadeps=4000 \
-			--param chkp-max-ctor-size=20000
+MAYBEIMPROVECOMPILER = --param max-pending-list-length=128 --param gcse-unrestricted-cost=1 --param max-hoist-depth=120 \
+			--param max-tail-merge-comparisons=80 --param max-tail-merge-iterations=16 \
+			--param iv-consider-all-candidates-bound=320 --param scev-max-expr-size=800 \
+			--param scev-max-expr-complexity=80 --param vect-max-version-for-alignment-checks=48 \
+			--param vect-max-version-for-alias-checks=80 --param max-iterations-to-track=8000 \
+			--param max-partial-antic-length=1600  --param loop-max-datarefs-for-datadeps=8000 \
+			--param chkp-max-ctor-size=20000 --param max-cse-path-length=80 --param max-cse-insns=8000
+
+IMPROVEGRAPHITECOMPILER = --param graphite-max-nb-scop-params=40 --param graphite-max-bbs-per-function=400 \
+			--param loop-block-tile-size=204
 		
 CC_FLAGS = -O3 \
 		$(CPUSPECIFIC) \
@@ -362,7 +365,8 @@ CC_FLAGS = -O3 \
 		$(GRAPHITE) \
 		$(LOOPOPTIMIZE) \
 		$(IMPROVECOMPILER) \
-		$(MAYBEIMPROVECOMPILER)
+		$(MAYBEIMPROVECOMPILER) \
+		$(IMPROVEGRAPHITECOMPILER)
 		     
 LD_FLAGS = -O3 --sort-common --strip-debug
 
